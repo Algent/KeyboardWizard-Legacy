@@ -1,16 +1,19 @@
 package committee.nova.keywizard.util;
 
-import committee.nova.mkb.api.IKeyBinding;
-import committee.nova.mkb.keybinding.KeyModifier;
-import cpw.mods.fml.client.FMLClientHandler;
+import java.util.ArrayList;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 
-import java.util.ArrayList;
+import committee.nova.mkb.api.IKeyBinding;
+import committee.nova.mkb.keybinding.KeyModifier;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class KeybindUtils {
 
-    public static final KeyBinding[] ALL_BINDINGS = FMLClientHandler.instance().getClient().gameSettings.keyBindings;
+    public static final KeyBinding[] ALL_BINDINGS = FMLClientHandler.instance()
+        .getClient().gameSettings.keyBindings;
 
     /**
      * Get the names of all bindings for a certain key and modifier
@@ -21,8 +24,7 @@ public class KeybindUtils {
     public static ArrayList<String> getBindingNames(int keyId, KeyModifier modifier) {
         ArrayList<String> bindingNames = new ArrayList<>();
 
-        if (keyId == 0)
-            return bindingNames;
+        if (keyId == 0) return bindingNames;
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
             if (currentBinding.getKeyCode() == keyId && ((IKeyBinding) currentBinding).getKeyModifier() == modifier)
@@ -34,12 +36,14 @@ public class KeybindUtils {
     public static ArrayList<String> getBindingNamesAndCategories(int keyId, KeyModifier modifier) {
         ArrayList<String> bindingNames = new ArrayList<>();
 
-        if (keyId == 0)
-            return bindingNames;
+        if (keyId == 0) return bindingNames;
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
             if (currentBinding.getKeyCode() == keyId && ((IKeyBinding) currentBinding).getKeyModifier() == modifier)
-                bindingNames.add(I18n.format(currentBinding.getKeyDescription()) + " (" + I18n.format(currentBinding.getKeyCategory()) + ")");
+                bindingNames.add(
+                    I18n.format(currentBinding.getKeyDescription()) + " ("
+                        + I18n.format(currentBinding.getKeyCategory())
+                        + ")");
         }
         return bindingNames;
     }
@@ -47,8 +51,7 @@ public class KeybindUtils {
     public static int getNumBindings(int keyId, KeyModifier modifier) {
         int num = 0;
 
-        if (keyId == 0)
-            return num;
+        if (keyId == 0) return num;
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
             if (currentBinding.getKeyCode() == keyId && ((IKeyBinding) currentBinding).getKeyModifier() == modifier)
@@ -66,7 +69,8 @@ public class KeybindUtils {
         int num = 0;
         for (KeyBinding currentBinding : ALL_BINDINGS) {
             if (!(currentBinding == binding)) {
-                if (currentBinding.getKeyCode() == binding.getKeyCode() && ((IKeyBinding) currentBinding).getKeyModifier() == ((IKeyBinding) binding).getKeyModifier())
+                if (currentBinding.getKeyCode() == binding.getKeyCode()
+                    && ((IKeyBinding) currentBinding).getKeyModifier() == ((IKeyBinding) binding).getKeyModifier())
                     num++;
             }
         }
@@ -81,8 +85,7 @@ public class KeybindUtils {
         ArrayList<String> categories = new ArrayList<>();
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
-            if (!categories.contains(currentBinding.getKeyCategory()))
-                categories.add(currentBinding.getKeyCategory());
+            if (!categories.contains(currentBinding.getKeyCategory())) categories.add(currentBinding.getKeyCategory());
         }
 
         return categories;

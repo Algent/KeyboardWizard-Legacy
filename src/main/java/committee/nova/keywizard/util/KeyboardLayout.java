@@ -1,6 +1,7 @@
 package committee.nova.keywizard.util;
 
 public enum KeyboardLayout {
+
     QWERTY("QWERTY"),
     NUMPAD("NUMPAD"),
     AUXILIARY("AUX");

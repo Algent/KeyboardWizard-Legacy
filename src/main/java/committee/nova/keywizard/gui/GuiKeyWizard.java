@@ -1,11 +1,12 @@
 package committee.nova.keywizard.gui;
 
-import committee.nova.keywizard.config.KeyWizardConfig;
-import committee.nova.keywizard.util.KeybindUtils;
-import committee.nova.keywizard.util.KeyboardFactory;
-import committee.nova.keywizard.util.KeyboardLayout;
-import committee.nova.mkb.api.IKeyBinding;
-import committee.nova.mkb.keybinding.KeyModifier;
+import static org.lwjgl.input.Keyboard.*;
+import static org.lwjgl.input.Mouse.getButtonName;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -14,34 +15,41 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
+
 import org.lwjgl.input.Mouse;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-
-import static org.lwjgl.input.Keyboard.*;
-import static org.lwjgl.input.Mouse.getButtonName;
+import committee.nova.keywizard.config.KeyWizardConfig;
+import committee.nova.keywizard.util.KeybindUtils;
+import committee.nova.keywizard.util.KeyboardFactory;
+import committee.nova.keywizard.util.KeyboardLayout;
+import committee.nova.mkb.api.IKeyBinding;
+import committee.nova.mkb.keybinding.KeyModifier;
 
 public class GuiKeyWizard extends GuiScreen {
 
     private enum SortType implements Comparator<KeyBinding> {
         NAME {
+
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
-                return I18n.format(arg0.getKeyDescription()).compareTo(I18n.format(arg1.getKeyDescription()));
+                return I18n.format(arg0.getKeyDescription())
+                    .compareTo(I18n.format(arg1.getKeyDescription()));
             }
         },
         CATEGORY {
+
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
-                return I18n.format(arg0.getKeyCategory()).compareTo(I18n.format(arg1.getKeyCategory()));
+                return I18n.format(arg0.getKeyCategory())
+                    .compareTo(I18n.format(arg1.getKeyCategory()));
             }
         },
         KEY {
+
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
-                return I18n.format(((IKeyBinding) arg0).getDisplayName()).compareTo(I18n.format(((IKeyBinding) arg1).getDisplayName()));
+                return I18n.format(((IKeyBinding) arg0).getDisplayName())
+                    .compareTo(I18n.format(((IKeyBinding) arg1).getDisplayName()));
             }
         }
 
@@ -54,7 +62,7 @@ public class GuiKeyWizard extends GuiScreen {
 
     private final GuiScreen parentScreen;
 
-    private final KeyboardLayout[] pages = {KeyWizardConfig.layout, KeyboardLayout.NUMPAD, KeyboardLayout.AUXILIARY};
+    private final KeyboardLayout[] pages = { KeyWizardConfig.layout, KeyboardLayout.NUMPAD, KeyboardLayout.AUXILIARY };
     private int pageNum = 0;
     private int mouse = 0;
     private int maxMouse = KeyWizardConfig.getMaxMouseButtons() - 1;
@@ -64,7 +72,6 @@ public class GuiKeyWizard extends GuiScreen {
     private String searchText = "";
     private int guiWidth;
     private int guiStartX;
-
 
     private GuiCategorySelector categoryList;
     private GuiTextField searchBar;
@@ -79,7 +86,6 @@ public class GuiKeyWizard extends GuiScreen {
     private GuiButton buttonMouseMinus;
     private GuiButton buttonSortBy;
 
-
     public GuiKeyWizard(Minecraft mcIn, GuiScreen parentScreen) {
         this.mc = mcIn;
         this.parentScreen = parentScreen;
@@ -92,14 +98,21 @@ public class GuiKeyWizard extends GuiScreen {
 
         for (KeyBinding binding : KeybindUtils.ALL_BINDINGS) {
             final IKeyBinding mixined = (IKeyBinding) binding;
-            if (mixined.getDisplayName().length() > maxBindingLength)
-                maxBindingLength = mixined.getDisplayName().length();
+            if (mixined.getDisplayName()
+                .length() > maxBindingLength)
+                maxBindingLength = mixined.getDisplayName()
+                    .length();
         }
 
         int bindingListWidth = (maxBindingLength * 11);
 
-        this.bindingList = new GuiBindingList(this, 10, this.height - 30, bindingListWidth, this.height - 40,
-                fontRendererObj.FONT_HEIGHT * 3 + 10);
+        this.bindingList = new GuiBindingList(
+            this,
+            10,
+            this.height - 30,
+            bindingListWidth,
+            this.height - 40,
+            fontRendererObj.FONT_HEIGHT * 3 + 10);
 
         this.searchBar = new GuiTextField(this.fontRendererObj, 10, this.height - 20, bindingListWidth, 14);
         this.searchBar.setFocused(true);
@@ -115,25 +128,54 @@ public class GuiKeyWizard extends GuiScreen {
 
         int maxCategoryLength = 0;
         for (String s : categories) {
-            if (I18n.format(s).length() > maxCategoryLength)
-                maxCategoryLength = s.length();
+            if (I18n.format(s)
+                .length() > maxCategoryLength) maxCategoryLength = s.length();
         }
 
         this.categoryList = new GuiCategorySelector(this, this.guiStartX, 5, maxCategoryLength * 9, categories);
         this.selectedCategory = this.categoryList.getSelctedCategory();
 
-        this.keyboard = KeyboardFactory.makeKeyboard(this.pages[this.pageNum], this, this.guiStartX, this.height / 2 - 90, this.guiWidth - 5, this.height);
+        this.keyboard = KeyboardFactory.makeKeyboard(
+            this.pages[this.pageNum],
+            this,
+            this.guiStartX,
+            this.height / 2 - 90,
+            this.guiWidth - 5,
+            this.height);
 
-        this.buttonPage = new GuiButton(0, this.width - 110, 5, 100, 20, I18n.format("gui.page") + ": " + this.pages[this.pageNum].getDisplayName());
+        this.buttonPage = new GuiButton(
+            0,
+            this.width - 110,
+            5,
+            100,
+            20,
+            I18n.format("gui.page") + ": " + this.pages[this.pageNum].getDisplayName());
         this.buttonReset = new GuiButton(0, this.guiStartX, this.height - 40, 75, 20, I18n.format("gui.resetBinding"));
-        this.buttonClear = new GuiButton(0, this.guiStartX + 76, this.height - 40, 75, 20, I18n.format("gui.clearBinding"));
+        this.buttonClear = new GuiButton(
+            0,
+            this.guiStartX + 76,
+            this.height - 40,
+            75,
+            20,
+            I18n.format("gui.clearBinding"));
         this.buttonDone = new GuiButton(0, this.width - 90, this.height - 40, 87, 20, I18n.format("gui.done"));
-        this.buttonActiveModifier = new GuiButton(1, this.guiStartX, this.height - 63, 150, 20,
-                I18n.format("gui.activeModifier") + ": " + activeModifier.toString());
-        this.buttonMouse = new GuiButton(0, this.guiStartX + 25, this.height - 85, 100, 20, I18n.format("gui.mouse") + ": " + getButtonName(this.mouse));
+        this.buttonActiveModifier = new GuiButton(
+            1,
+            this.guiStartX,
+            this.height - 63,
+            150,
+            20,
+            I18n.format("gui.activeModifier") + ": " + activeModifier.toString());
+        this.buttonMouse = new GuiButton(
+            0,
+            this.guiStartX + 25,
+            this.height - 85,
+            100,
+            20,
+            I18n.format("gui.mouse") + ": " + getButtonName(this.mouse));
         this.buttonMousePlus = new GuiButton(0, this.guiStartX + 126, this.height - 85, 25, 20, "+");
         this.buttonMouseMinus = new GuiButton(0, this.guiStartX, this.height - 85, 25, 20, "-");
-        //this.buttonSortBy = new GuiButton(0, this.searchBar.x + 10, this.height - 20, 20, 14, "Cat");
+        // this.buttonSortBy = new GuiButton(0, this.searchBar.x + 10, this.height - 20, 20, 14, "Cat");
 
         this.setSelectedKeybind(this.bindingList.getSelectedKeybind());
 
@@ -145,7 +187,7 @@ public class GuiKeyWizard extends GuiScreen {
         this.buttonList.add(this.buttonMouse);
         this.buttonList.add(this.buttonMousePlus);
         this.buttonList.add(this.buttonMouseMinus);
-        //this.buttonList.add(this.buttonSortBy);
+        // this.buttonList.add(this.buttonSortBy);
 
     }
 
@@ -170,10 +212,10 @@ public class GuiKeyWizard extends GuiScreen {
             this.buttonClear.enabled = !(this.selectedKeybind.getKeyCode() == 0);
         }
 
-        if (this.categoryList != null)
-            this.selectedCategory = this.categoryList.getSelctedCategory();
+        if (this.categoryList != null) this.selectedCategory = this.categoryList.getSelctedCategory();
 
-        if (!this.searchBar.getText().equals(this.searchText)) {
+        if (!this.searchBar.getText()
+            .equals(this.searchText)) {
             this.searchText = this.searchBar.getText();
         }
 
@@ -221,10 +263,14 @@ public class GuiKeyWizard extends GuiScreen {
                 this.buttonMouse.displayString = I18n.format("gui.mouse") + ": " + getButtonName(this.mouse);
                 break;
             case 1:
-                this.buttonMouse.displayString = I18n.format("gui.mouse") + ": " + EnumChatFormatting.GREEN + getButtonName(this.mouse);
+                this.buttonMouse.displayString = I18n.format("gui.mouse") + ": "
+                    + EnumChatFormatting.GREEN
+                    + getButtonName(this.mouse);
                 break;
             default:
-                this.buttonMouse.displayString = I18n.format("gui.mouse") + ": " + EnumChatFormatting.RED + getButtonName(this.mouse);
+                this.buttonMouse.displayString = I18n.format("gui.mouse") + ": "
+                    + EnumChatFormatting.RED
+                    + getButtonName(this.mouse);
                 break;
         }
 
@@ -262,7 +308,13 @@ public class GuiKeyWizard extends GuiScreen {
                 if (this.pageNum > this.pages.length - 1) {
                     this.pageNum = 0;
                 }
-                this.keyboard = KeyboardFactory.makeKeyboard(this.pages[this.pageNum], this, this.guiStartX, this.height / 2 - 90, this.guiWidth - 5, this.height);
+                this.keyboard = KeyboardFactory.makeKeyboard(
+                    this.pages[this.pageNum],
+                    this,
+                    this.guiStartX,
+                    this.height / 2 - 90,
+                    this.guiWidth - 5,
+                    this.height);
             }
 
             if (button == this.buttonMouse) {
@@ -290,7 +342,6 @@ public class GuiKeyWizard extends GuiScreen {
             this.buttonReset.enabled = !mixined.isSetToDefaultValue();
         }
     }
-
 
     @Override
     public void handleMouseInput() {

@@ -1,8 +1,8 @@
 package committee.nova.keywizard.util;
 
-import java.util.HashMap;
-
 import static org.lwjgl.input.Keyboard.*;
+
+import java.util.HashMap;
 
 public class KeyHelper {
 

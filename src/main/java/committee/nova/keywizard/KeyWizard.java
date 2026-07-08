@@ -1,9 +1,16 @@
 package committee.nova.keywizard;
 
+import net.minecraftforge.common.MinecraftForge;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import committee.nova.keywizard.config.KeyWizardConfig;
 import committee.nova.keywizard.handlers.ClientFMLEventHandler;
 import committee.nova.keywizard.handlers.ClientForgeEventHandler;
 import committee.nova.keywizard.key.KeyInit;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -11,10 +18,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraftforge.common.MinecraftForge;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid = KeyWizard.MODID, useMetadata = true, dependencies = "required-after:mkb@[2.0.0,)")
 public class KeyWizard {
@@ -23,7 +26,7 @@ public class KeyWizard {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    private static final String[] conflictingMods = {"controlling"};
+    private static final String[] conflictingMods = { "controlling" };
 
     @Mod.Instance
     public static KeyWizard instance;
@@ -40,7 +43,9 @@ public class KeyWizard {
         if (e.getSide() != Side.CLIENT) return;
         KeyInit.init();
         MinecraftForge.EVENT_BUS.register(new ClientForgeEventHandler());
-        FMLCommonHandler.instance().bus().register(new ClientFMLEventHandler());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new ClientFMLEventHandler());
     }
 
     @Mod.EventHandler

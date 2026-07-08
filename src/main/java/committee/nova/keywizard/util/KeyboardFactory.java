@@ -1,12 +1,14 @@
 package committee.nova.keywizard.util;
 
+import static org.lwjgl.input.Keyboard.*;
+
 import committee.nova.keywizard.gui.GuiKeyWizard;
 import committee.nova.keywizard.gui.GuiKeyboard;
 
-import static org.lwjgl.input.Keyboard.*;
-
 public class KeyboardFactory {
-    public static GuiKeyboard makeKeyboard(KeyboardLayout layout, GuiKeyWizard parent, double x, double y, double width, double height) {
+
+    public static GuiKeyboard makeKeyboard(KeyboardLayout layout, GuiKeyWizard parent, double x, double y, double width,
+        double height) {
         switch (layout) {
             case QWERTY:
                 return makeQwertyKeyboard(parent, x, y, width, height);
@@ -19,7 +21,8 @@ public class KeyboardFactory {
         }
     }
 
-    private static GuiKeyboard makeQwertyKeyboard(GuiKeyWizard parent, double x, double y, double width, double height) {
+    private static GuiKeyboard makeQwertyKeyboard(GuiKeyWizard parent, double x, double y, double width,
+        double height) {
         GuiKeyboard kb = new GuiKeyboard(parent, x, y);
         double currentX;
         double currentY = 0;
@@ -60,7 +63,14 @@ public class KeyboardFactory {
 
         currentY += keyHeight + keySpacing;
         keyWidth = width / 7 - keySpacing;
-        currentX = addHorizontalRow(kb, new int[]{KEY_LCONTROL, KEY_LMETA, KEY_LMENU, KEY_SPACE, KEY_RMENU, KEY_RMETA, KEY_RCONTROL}, 0, currentY, keyWidth, keyHeight, keySpacing);
+        currentX = addHorizontalRow(
+            kb,
+            new int[] { KEY_LCONTROL, KEY_LMETA, KEY_LMENU, KEY_SPACE, KEY_RMENU, KEY_RMETA, KEY_RCONTROL },
+            0,
+            currentY,
+            keyWidth,
+            keyHeight,
+            keySpacing);
 
         return kb;
     }
@@ -74,7 +84,14 @@ public class KeyboardFactory {
         double keyWidth = width / 4 - keySpacing;
         double keyHeight = height / 14;
 
-        currentX = addHorizontalRow(kb, new int[]{KEY_DIVIDE, KEY_MULTIPLY, KEY_SUBTRACT}, 0, currentY, keyWidth, keyHeight, keySpacing);
+        currentX = addHorizontalRow(
+            kb,
+            new int[] { KEY_DIVIDE, KEY_MULTIPLY, KEY_SUBTRACT },
+            0,
+            currentY,
+            keyWidth,
+            keyHeight,
+            keySpacing);
         kb.addKey(currentX, currentY, keyWidth / 3, keyHeight * 2 + keySpacing, KEY_ADD);
         currentX = 0;
         currentY += keyHeight + keySpacing;
@@ -102,16 +119,44 @@ public class KeyboardFactory {
         double keyWidth = width / 5 - keySpacing;
         double keyHeight = height / 14;
 
-        currentX = addHorizontalRow(kb, new int[]{KEY_SYSRQ, KEY_SCROLL, KEY_PAUSE, KEY_F13, KEY_F14}, currentX, currentY, keyWidth, keyHeight, keySpacing);
+        currentX = addHorizontalRow(
+            kb,
+            new int[] { KEY_SYSRQ, KEY_SCROLL, KEY_PAUSE, KEY_F13, KEY_F14 },
+            currentX,
+            currentY,
+            keyWidth,
+            keyHeight,
+            keySpacing);
         currentX = 0;
         currentY += keyHeight + keySpacing;
-        currentX = addHorizontalRow(kb, new int[]{KEY_INSERT, KEY_HOME, KEY_PRIOR, KEY_F15, KEY_F16}, currentX, currentY, keyWidth, keyHeight, keySpacing);
+        currentX = addHorizontalRow(
+            kb,
+            new int[] { KEY_INSERT, KEY_HOME, KEY_PRIOR, KEY_F15, KEY_F16 },
+            currentX,
+            currentY,
+            keyWidth,
+            keyHeight,
+            keySpacing);
         currentX = 0;
         currentY += keyHeight + keySpacing;
-        currentX = addHorizontalRow(kb, new int[]{KEY_DELETE, KEY_END, KEY_NEXT, KEY_F17, KEY_F18}, currentX, currentY, keyWidth, keyHeight, keySpacing);
+        currentX = addHorizontalRow(
+            kb,
+            new int[] { KEY_DELETE, KEY_END, KEY_NEXT, KEY_F17, KEY_F18 },
+            currentX,
+            currentY,
+            keyWidth,
+            keyHeight,
+            keySpacing);
         currentX = 0;
         currentY += keyHeight + keySpacing;
-        currentX = addHorizontalRow(kb, new int[]{KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_F19}, currentX, currentY, keyWidth, keyHeight, keySpacing);
+        currentX = addHorizontalRow(
+            kb,
+            new int[] { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_F19 },
+            currentX,
+            currentY,
+            keyWidth,
+            keyHeight,
+            keySpacing);
         return kb;
     }
 
@@ -120,7 +165,8 @@ public class KeyboardFactory {
      *
      * @return x position of left edge of the last key added
      */
-    private static double addHorizontalRow(GuiKeyboard kb, int startCode, int endCode, double startX, double y, double width, double height, double spacing) {
+    private static double addHorizontalRow(GuiKeyboard kb, int startCode, int endCode, double startX, double y,
+        double width, double height, double spacing) {
         double currentX = startX;
         for (int i = startCode; i <= endCode; i++) {
             kb.addKey(currentX, y, width, height, i);
@@ -141,7 +187,8 @@ public class KeyboardFactory {
      * @param spacing
      * @return x position of left edge of the last key added
      */
-    private static double addHorizontalRow(GuiKeyboard kb, int[] keys, double startX, double y, double width, double height, double spacing) {
+    private static double addHorizontalRow(GuiKeyboard kb, int[] keys, double startX, double y, double width,
+        double height, double spacing) {
         double currentX = startX;
         for (int k : keys) {
             kb.addKey(currentX, y, width, height, k);

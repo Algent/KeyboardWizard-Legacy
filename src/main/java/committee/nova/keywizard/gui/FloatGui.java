@@ -1,17 +1,21 @@
 package committee.nova.keywizard.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class FloatGui {
-    public static final ResourceLocation OPTIONS_BACKGROUND = new ResourceLocation("textures/gui/options_background.png");
+
+    public static final ResourceLocation OPTIONS_BACKGROUND = new ResourceLocation(
+        "textures/gui/options_background.png");
     public static final ResourceLocation STAT_ICONS = new ResourceLocation("textures/gui/container/stats_icons.png");
     public static final ResourceLocation ICONS = new ResourceLocation("textures/gui/icons.png");
     protected float zLevel;
@@ -41,7 +45,6 @@ public class FloatGui {
 
         drawRect(x, startY + 1, x + 1, endY, color);
     }
-
 
     protected void drawNoFillRect(double left, double top, double right, double bottom, int color) {
         drawHorizontalLine(left, right, top, color);
@@ -91,7 +94,8 @@ public class FloatGui {
      * Draws a rectangle with a vertical gradient between the specified colors (ARGB format). Args : x1, y1, x2, y2,
      * topColor, bottomColor
      */
-    protected void drawGradientRect(double left, double top, double right, double bottom, int startColor, int endColor) {
+    protected void drawGradientRect(double left, double top, double right, double bottom, int startColor,
+        int endColor) {
         float f = (float) (startColor >> 24 & 255) / 255.0F;
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
         float f2 = (float) (startColor >> 8 & 255) / 255.0F;
@@ -127,7 +131,7 @@ public class FloatGui {
         fontRendererIn.drawStringWithShadow(text, (x - fontRendererIn.getStringWidth(text) / 2), y, color);
     }
 
-    //todo: it was float
+    // todo: it was float
 
     /**
      * Renders the specified text to the screen. Args : renderer, string, x, y, color
@@ -144,14 +148,34 @@ public class FloatGui {
      * Draws a textured rectangle at the current z-value.
      */
     public void drawTexturedModalRect(double x, double y, int textureX, int textureY, double width, double height) {
-        //float f = 0.00390625F; Unused??
-        //float f1 = 0.00390625F; Unused??
+        // float f = 0.00390625F; Unused??
+        // float f1 = 0.00390625F; Unused??
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((x + 0), (y + height), this.zLevel, ((float) (textureX) * 0.00390625F), (float) (textureY + height) * 0.00390625F);
-        tessellator.addVertexWithUV((x + width), (y + height), this.zLevel, ((float) (textureX + width) * 0.00390625F), (float) (textureY + height) * 0.00390625F);
-        tessellator.addVertexWithUV((x + width), (y + 0), this.zLevel, ((float) (textureX + width) * 0.00390625F), (float) (textureY) * 0.00390625F);
-        tessellator.addVertexWithUV((x + 0), (y + 0), this.zLevel, ((float) (textureX) * 0.00390625F), (float) (textureY) * 0.00390625F);
+        tessellator.addVertexWithUV(
+            (x + 0),
+            (y + height),
+            this.zLevel,
+            ((float) (textureX) * 0.00390625F),
+            (float) (textureY + height) * 0.00390625F);
+        tessellator.addVertexWithUV(
+            (x + width),
+            (y + height),
+            this.zLevel,
+            ((float) (textureX + width) * 0.00390625F),
+            (float) (textureY + height) * 0.00390625F);
+        tessellator.addVertexWithUV(
+            (x + width),
+            (y + 0),
+            this.zLevel,
+            ((float) (textureX + width) * 0.00390625F),
+            (float) (textureY) * 0.00390625F);
+        tessellator.addVertexWithUV(
+            (x + 0),
+            (y + 0),
+            this.zLevel,
+            ((float) (textureX) * 0.00390625F),
+            (float) (textureY) * 0.00390625F);
         tessellator.draw();
     }
 
@@ -159,26 +183,54 @@ public class FloatGui {
      * Draws a textured rectangle using the texture currently bound to the TextureManager
      */
     public void drawTexturedModalRect(int xCoord, int yCoord, int minU, int minV, int maxU, int maxV) {
-        //float f = 0.00390625F; Unused??
-        //float f1 = 0.00390625F; Unused??
+        // float f = 0.00390625F; Unused??
+        // float f1 = 0.00390625F; Unused??
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(xCoord + 0.0F, (yCoord + (float) maxV), this.zLevel, ((float) (minU) * 0.00390625F), ((float) (minV + maxV) * 0.00390625F));
-        tessellator.addVertexWithUV((xCoord + (float) maxU), (yCoord + (float) maxV), this.zLevel, ((float) (minU + maxU) * 0.00390625F), ((float) (minV + maxV) * 0.00390625F));
-        tessellator.addVertexWithUV((xCoord + (float) maxU), (yCoord + 0.0F), this.zLevel, ((float) (minU + maxU) * 0.00390625F), ((float) (minV) * 0.00390625F));
-        tessellator.addVertexWithUV((xCoord + 0.0F), (yCoord + 0.0F), this.zLevel, ((float) (minU) * 0.00390625F), ((float) (minV) * 0.00390625F));
+        tessellator.addVertexWithUV(
+            xCoord + 0.0F,
+            (yCoord + (float) maxV),
+            this.zLevel,
+            ((float) (minU) * 0.00390625F),
+            ((float) (minV + maxV) * 0.00390625F));
+        tessellator.addVertexWithUV(
+            (xCoord + (float) maxU),
+            (yCoord + (float) maxV),
+            this.zLevel,
+            ((float) (minU + maxU) * 0.00390625F),
+            ((float) (minV + maxV) * 0.00390625F));
+        tessellator.addVertexWithUV(
+            (xCoord + (float) maxU),
+            (yCoord + 0.0F),
+            this.zLevel,
+            ((float) (minU + maxU) * 0.00390625F),
+            ((float) (minV) * 0.00390625F));
+        tessellator.addVertexWithUV(
+            (xCoord + 0.0F),
+            (yCoord + 0.0F),
+            this.zLevel,
+            ((float) (minU) * 0.00390625F),
+            ((float) (minV) * 0.00390625F));
         tessellator.draw();
     }
 
     /**
      * Draws a texture rectangle using the texture currently bound to the TextureManager
      */
-    public void drawTexturedModalRect(int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn) {
+    public void drawTexturedModalRect(int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn,
+        int heightIn) {
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(xCoord, yCoord + heightIn, this.zLevel, textureSprite.getMinU(), textureSprite.getMaxV());
-        tessellator.addVertexWithUV(xCoord + widthIn, yCoord + heightIn, this.zLevel, textureSprite.getMaxU(), textureSprite.getMaxV());
-        tessellator.addVertexWithUV(xCoord + widthIn, yCoord, this.zLevel, textureSprite.getMaxU(), textureSprite.getMinV());
+        tessellator
+            .addVertexWithUV(xCoord, yCoord + heightIn, this.zLevel, textureSprite.getMinU(), textureSprite.getMaxV());
+        tessellator.addVertexWithUV(
+            xCoord + widthIn,
+            yCoord + heightIn,
+            this.zLevel,
+            textureSprite.getMaxU(),
+            textureSprite.getMaxV());
+        tessellator
+            .addVertexWithUV(xCoord + widthIn, yCoord, this.zLevel, textureSprite.getMaxU(), textureSprite.getMinV());
         tessellator.addVertexWithUV(xCoord, yCoord, this.zLevel, textureSprite.getMinU(), textureSprite.getMinV());
         tessellator.draw();
     }
@@ -186,13 +238,15 @@ public class FloatGui {
     /**
      * Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
      */
-    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight) {
+    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height,
+        float textureWidth, float textureHeight) {
         float f = 1.0F / textureWidth;
         float f1 = 1.0F / textureHeight;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(x, (y + height), 0.0D, (u * f), ((v + (float) height) * f1));
-        tessellator.addVertexWithUV((x + width), (y + height), 0.0D, ((u + (float) width) * f), ((v + (float) height) * f1));
+        tessellator
+            .addVertexWithUV((x + width), (y + height), 0.0D, ((u + (float) width) * f), ((v + (float) height) * f1));
         tessellator.addVertexWithUV((x + width), y, 0.0D, ((u + (float) width) * f), (v * f1));
         tessellator.addVertexWithUV(x, y, 0.0D, (u * f), (v * f1));
         tessellator.draw();
@@ -201,7 +255,8 @@ public class FloatGui {
     /**
      * Draws a scaled, textured, tiled modal rect at z = 0. This method isn't used anywhere in vanilla code.
      */
-    public static void drawScaledCustomSizeModalRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight) {
+    public static void drawScaledCustomSizeModalRect(int x, int y, float u, float v, int uWidth, int vHeight, int width,
+        int height, float tileWidth, float tileHeight) {
         float f = 1.0F / tileWidth;
         float f1 = 1.0F / tileHeight;
         Tessellator tessellator = Tessellator.instance;

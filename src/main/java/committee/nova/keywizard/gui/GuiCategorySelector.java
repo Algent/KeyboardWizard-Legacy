@@ -1,5 +1,8 @@
 package committee.nova.keywizard.gui;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
@@ -8,16 +11,15 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import org.lwjgl.opengl.GL11;
 
 /**
  * An NEI-style dropdown list menu. Its functionality is
  * hacked together using the vanilla GuiButton class
  */
 public class GuiCategorySelector extends GuiButton {
+
     private final GuiKeyWizard parent;
 
     private boolean extended = false;
@@ -28,6 +30,7 @@ public class GuiCategorySelector extends GuiButton {
     private String selectedCategory;
 
     private class GuiCategoryList extends GuiScrollingList {
+
         public GuiCategoryList(GuiKeyWizard parent, int left, int top, int width, int height, int entryHeight) {
             super(parent.getClient(), width, height, top, top + height, left, entryHeight, parent.width, parent.height);
         }
@@ -49,8 +52,7 @@ public class GuiCategorySelector extends GuiButton {
         }
 
         @Override
-        protected void drawBackground() {
-        }
+        protected void drawBackground() {}
 
         @Override
         protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
@@ -88,18 +90,27 @@ public class GuiCategorySelector extends GuiButton {
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-        //this.zLevel = 1;
+        // this.zLevel = 1;
         if (this.visible) {
             FontRenderer fontrenderer = mc.fontRenderer;
-            mc.getTextureManager().bindTexture(buttonTextures);
+            mc.getTextureManager()
+                .bindTexture(buttonTextures);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition
+                && mouseX < this.xPosition + this.width
+                && mouseY < this.yPosition + this.height;
             int i = this.getShadingMultiplier(this.field_146123_n);
             GL11.glEnable(GL11.GL_BLEND);
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
             GL11.glBlendFunc(770, 771);
             this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i * 20, this.width / 2, this.height);
-            this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
+            this.drawTexturedModalRect(
+                this.xPosition + this.width / 2,
+                this.yPosition,
+                200 - this.width / 2,
+                46 + i * 20,
+                this.width / 2,
+                this.height);
             this.mouseDragged(mc, mouseX, mouseY);
             int j = 0xE0E0E0;
 
@@ -111,8 +122,12 @@ public class GuiCategorySelector extends GuiButton {
                 j = 0xFFFFA0;
             }
 
-
-            this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, j);
+            this.drawCenteredString(
+                fontrenderer,
+                this.displayString,
+                this.xPosition + this.width / 2,
+                this.yPosition + (this.height - 8) / 2,
+                j);
 
             if (this.extended) {
                 this.list.drawScreen(mouseX, mouseY);
@@ -143,12 +158,18 @@ public class GuiCategorySelector extends GuiButton {
     }
 
     public void mouseClicked(Minecraft mc, int mouseX, int mouseY, int button) {
-        if (mouseX >= this.xPosition && mouseX < this.xPosition + this.width && mouseY >= this.yPosition && mouseY < this.yPosition + this.height && button == 0) {
-            mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+        if (mouseX >= this.xPosition && mouseX < this.xPosition + this.width
+            && mouseY >= this.yPosition
+            && mouseY < this.yPosition + this.height
+            && button == 0) {
+            mc.getSoundHandler()
+                .playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
             this.setState(!this.extended);
-        } else if (!(mouseX >= list.getLeft() && mouseX < list.getLeft() + list.getListWidth() && mouseY >= list.getTop() && mouseY < list.getTop() + list.getListHeight()) && button == 0) {
-            this.setState(false);
-        }
+        } else if (!(mouseX >= list.getLeft() && mouseX < list.getLeft() + list.getListWidth()
+            && mouseY >= list.getTop()
+            && mouseY < list.getTop() + list.getListHeight()) && button == 0) {
+                this.setState(false);
+            }
     }
 
     public void setState(boolean extended) {

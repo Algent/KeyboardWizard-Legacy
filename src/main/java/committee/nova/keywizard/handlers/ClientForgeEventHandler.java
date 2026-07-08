@@ -1,16 +1,18 @@
 package committee.nova.keywizard.handlers;
 
-import committee.nova.keywizard.config.KeyWizardConfig;
-import committee.nova.keywizard.gui.GuiKeyWizard;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
+
+import committee.nova.keywizard.config.KeyWizardConfig;
+import committee.nova.keywizard.gui.GuiKeyWizard;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientForgeEventHandler {
@@ -40,7 +42,13 @@ public class ClientForgeEventHandler {
     @SubscribeEvent
     public void controlsGuiActionPreformed(ActionPerformedEvent e) {
         if (KeyWizardConfig.canOpenFromControlsGui() && e.gui instanceof GuiControls && e.button.id == 203) {
-            FMLClientHandler.instance().getClient().displayGuiScreen(new GuiKeyWizard(FMLClientHandler.instance().getClient(), e.gui));
+            FMLClientHandler.instance()
+                .getClient()
+                .displayGuiScreen(
+                    new GuiKeyWizard(
+                        FMLClientHandler.instance()
+                            .getClient(),
+                        e.gui));
         }
     }
 }

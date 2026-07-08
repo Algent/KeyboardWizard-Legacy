@@ -1,17 +1,20 @@
 package committee.nova.keywizard.gui;
 
-import committee.nova.keywizard.util.GuiUtils;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import java.util.List;
+import committee.nova.keywizard.util.GuiUtils;
 
 public abstract class GuiScrollingList {
+
     private final Minecraft client;
     protected final int listWidth;
     protected final int listHeight;
@@ -41,7 +44,8 @@ public abstract class GuiScrollingList {
         this(client, width, height, top, bottom, left, entryHeight, width, height);
     }
 
-    public GuiScrollingList(Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight, int screenWidth, int screenHeight) {
+    public GuiScrollingList(Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight,
+        int screenWidth, int screenHeight) {
         this.client = client;
         this.listWidth = width;
         this.listHeight = height;
@@ -89,8 +93,7 @@ public abstract class GuiScrollingList {
     protected abstract void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess);
 
     @Deprecated
-    protected void func_27260_a(int entryRight, int relativeY, Tessellator tess) {
-    }
+    protected void func_27260_a(int entryRight, int relativeY, Tessellator tess) {}
 
     /**
      * Draw anything special on the screen. GL_SCISSOR is enabled for anything that
@@ -101,16 +104,14 @@ public abstract class GuiScrollingList {
     }
 
     @Deprecated
-    protected void func_27255_a(int x, int y) {
-    }
+    protected void func_27255_a(int x, int y) {}
 
     protected void clickHeader(int x, int y) {
         func_27255_a(x, y);
     }
 
     @Deprecated
-    protected void func_27257_b(int mouseX, int mouseY) {
-    }
+    protected void func_27257_b(int mouseX, int mouseY) {}
 
     /**
      * Draw anything special on the screen. GL_SCISSOR is enabled for anything that
@@ -126,7 +127,8 @@ public abstract class GuiScrollingList {
         int right = this.left + this.listWidth - 7;
         int relativeY = y - this.top - this.headerHeight + (int) this.scrollDistance - 4;
         int entryIndex = relativeY / this.slotHeight;
-        return x >= left && x <= right && entryIndex >= 0 && relativeY >= 0 && entryIndex < this.getSize() ? entryIndex : -1;
+        return x >= left && x <= right && entryIndex >= 0 && relativeY >= 0 && entryIndex < this.getSize() ? entryIndex
+            : -1;
     }
 
     // FIXME: is this correct/still needed?
@@ -165,12 +167,11 @@ public abstract class GuiScrollingList {
         }
     }
 
-
     public void handleMouseInput(int mouseX, int mouseY) {
-        boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.listWidth &&
-                mouseY >= this.top && mouseY <= this.bottom;
-        if (!isHovering)
-            return;
+        boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.listWidth
+            && mouseY >= this.top
+            && mouseY <= this.bottom;
+        if (!isHovering) return;
 
         int scroll = Mouse.getEventDWheel();
         if (scroll != 0) {
@@ -183,8 +184,9 @@ public abstract class GuiScrollingList {
         this.mouseY = mouseY;
         this.drawBackground();
 
-        boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.listWidth &&
-                mouseY >= this.top && mouseY <= this.bottom;
+        boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.listWidth
+            && mouseY >= this.top
+            && mouseY <= this.bottom;
         int listLength = this.getSize();
         int scrollBarWidth = 6;
         int scrollBarRight = this.left + this.listWidth;
@@ -201,7 +203,9 @@ public abstract class GuiScrollingList {
                     int slotIndex = mouseListY / this.slotHeight;
 
                     if (mouseX <= entryRight && slotIndex >= 0 && mouseListY >= 0 && slotIndex < listLength) {
-                        this.elementClicked(slotIndex, slotIndex == this.selectedIndex && System.currentTimeMillis() - this.lastClickTime < 250L);
+                        this.elementClicked(
+                            slotIndex,
+                            slotIndex == this.selectedIndex && System.currentTimeMillis() - this.lastClickTime < 250L);
                         this.selectedIndex = slotIndex;
                         this.lastClickTime = System.currentTimeMillis();
                     } else if (mouseX >= entryLeft && mouseX <= entryRight && mouseListY < 0) {
@@ -216,8 +220,7 @@ public abstract class GuiScrollingList {
                         int var13 = (int) ((float) (viewHeight * viewHeight) / (float) this.getContentHeight());
 
                         if (var13 < 32) var13 = 32;
-                        if (var13 > viewHeight - border * 2)
-                            var13 = viewHeight - border * 2;
+                        if (var13 > viewHeight - border * 2) var13 = viewHeight - border * 2;
 
                         this.scrollFactor /= (float) (viewHeight - var13) / (float) scrollHeight;
                     } else {
@@ -244,8 +247,11 @@ public abstract class GuiScrollingList {
         double scaleW = client.displayWidth / res.getScaledWidth_double();
         double scaleH = client.displayHeight / res.getScaledHeight_double();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((int) (left * scaleW), (int) (client.displayHeight - (bottom * scaleH)),
-                (int) (listWidth * scaleW), (int) (viewHeight * scaleH));
+        GL11.glScissor(
+            (int) (left * scaleW),
+            (int) (client.displayHeight - (bottom * scaleH)),
+            (int) (listWidth * scaleW),
+            (int) (viewHeight * scaleH));
 
         if (this.client.theWorld != null) {
             this.drawGradientRect(this.left, this.top, this.right, this.bottom, 0xC0101010, 0xD0101010);
@@ -258,10 +264,30 @@ public abstract class GuiScrollingList {
             final float scale = 32.0F;
             tess.startDrawingQuads();
             tess.setColorRGBA(0x20, 0x20, 0x20, 0xFF);
-            tess.addVertexWithUV(this.left, this.bottom, 0.0D, this.left / scale, (this.bottom + (int) this.scrollDistance) / scale);
-            tess.addVertexWithUV(this.right, this.bottom, 0.0D, this.right / scale, (this.bottom + (int) this.scrollDistance) / scale);
-            tess.addVertexWithUV(this.right, this.top, 0.0D, this.right / scale, (this.top + (int) this.scrollDistance) / scale);
-            tess.addVertexWithUV(this.left, this.top, 0.0D, this.left / scale, (this.top + (int) this.scrollDistance) / scale);
+            tess.addVertexWithUV(
+                this.left,
+                this.bottom,
+                0.0D,
+                this.left / scale,
+                (this.bottom + (int) this.scrollDistance) / scale);
+            tess.addVertexWithUV(
+                this.right,
+                this.bottom,
+                0.0D,
+                this.right / scale,
+                (this.bottom + (int) this.scrollDistance) / scale);
+            tess.addVertexWithUV(
+                this.right,
+                this.top,
+                0.0D,
+                this.right / scale,
+                (this.top + (int) this.scrollDistance) / scale);
+            tess.addVertexWithUV(
+                this.left,
+                this.top,
+                0.0D,
+                this.left / scale,
+                (this.top + (int) this.scrollDistance) / scale);
             tess.draw();
         }
 
@@ -308,8 +334,7 @@ public abstract class GuiScrollingList {
 
             if (height < 32) height = 32;
 
-            if (height > viewHeight - border * 2)
-                height = viewHeight - border * 2;
+            if (height > viewHeight - border * 2) height = viewHeight - border * 2;
 
             int barTop = (int) this.scrollDistance * (viewHeight - height) / extraHeight + this.top;
             if (barTop < this.top) {

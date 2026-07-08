@@ -1,19 +1,22 @@
 package committee.nova.keywizard.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-
 public class GuiUtils {
+
     private static final ItemStack cachedTooltipStack = new ItemStack(Blocks.air);
 
     public static void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
@@ -45,7 +48,8 @@ public class GuiUtils {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-    public static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
+    public static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor,
+        int endColor) {
         float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
         float startRed = (float) (startColor >> 16 & 255) / 255.0F;
         float startGreen = (float) (startColor >> 8 & 255) / 255.0F;
@@ -87,12 +91,13 @@ public class GuiUtils {
      * @param mouseX       the mouse X position
      * @param mouseY       the mouse Y position
      * @param screenWidth  the available screen width for the tooltip to drawn in
-     * @param screenHeight the available  screen height for the tooltip to drawn in
+     * @param screenHeight the available screen height for the tooltip to drawn in
      * @param maxTextWidth the maximum width of the text in the tooltip box.
      *                     Set to a negative number to have no max width.
      * @param font         the font for drawing the text in the tooltip box
      */
-    public static void drawHoveringText(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font) {
+    public static void drawHoveringText(List<String> textLines, int mouseX, int mouseY, int screenWidth,
+        int screenHeight, int maxTextWidth, FontRenderer font) {
         drawHoveringText(cachedTooltipStack, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth, font);
     }
 
@@ -101,7 +106,8 @@ public class GuiUtils {
      *
      * @see #drawHoveringText(List, int, int, int, int, int, FontRenderer)
      */
-    public static void drawHoveringText(@Nonnull final ItemStack stack, List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font) {
+    public static void drawHoveringText(@Nonnull final ItemStack stack, List<String> textLines, int mouseX, int mouseY,
+        int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font) {
         if (!textLines.isEmpty()) {
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
             RenderHelper.disableStandardItemLighting();
@@ -187,16 +193,78 @@ public class GuiUtils {
             int backgroundColor = 0xF0100010;
             int borderColorStart = 0x505000FF;
             int borderColorEnd = (borderColorStart & 0xFEFEFE) >> 1 | borderColorStart & 0xFF000000;
-            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
-            drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
-            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-            drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-            drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
-            drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
-            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColorStart, borderColorStart);
-            drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
-
+            drawGradientRect(
+                zLevel,
+                tooltipX - 3,
+                tooltipY - 4,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY - 3,
+                backgroundColor,
+                backgroundColor);
+            drawGradientRect(
+                zLevel,
+                tooltipX - 3,
+                tooltipY + tooltipHeight + 3,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY + tooltipHeight + 4,
+                backgroundColor,
+                backgroundColor);
+            drawGradientRect(
+                zLevel,
+                tooltipX - 3,
+                tooltipY - 3,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY + tooltipHeight + 3,
+                backgroundColor,
+                backgroundColor);
+            drawGradientRect(
+                zLevel,
+                tooltipX - 4,
+                tooltipY - 3,
+                tooltipX - 3,
+                tooltipY + tooltipHeight + 3,
+                backgroundColor,
+                backgroundColor);
+            drawGradientRect(
+                zLevel,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY - 3,
+                tooltipX + tooltipTextWidth + 4,
+                tooltipY + tooltipHeight + 3,
+                backgroundColor,
+                backgroundColor);
+            drawGradientRect(
+                zLevel,
+                tooltipX - 3,
+                tooltipY - 3 + 1,
+                tooltipX - 3 + 1,
+                tooltipY + tooltipHeight + 3 - 1,
+                borderColorStart,
+                borderColorEnd);
+            drawGradientRect(
+                zLevel,
+                tooltipX + tooltipTextWidth + 2,
+                tooltipY - 3 + 1,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY + tooltipHeight + 3 - 1,
+                borderColorStart,
+                borderColorEnd);
+            drawGradientRect(
+                zLevel,
+                tooltipX - 3,
+                tooltipY - 3,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY - 3 + 1,
+                borderColorStart,
+                borderColorStart);
+            drawGradientRect(
+                zLevel,
+                tooltipX - 3,
+                tooltipY + tooltipHeight + 2,
+                tooltipX + tooltipTextWidth + 3,
+                tooltipY + tooltipHeight + 3,
+                borderColorEnd,
+                borderColorEnd);
 
             for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
                 String line = textLines.get(lineNumber);

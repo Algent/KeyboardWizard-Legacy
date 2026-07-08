@@ -1,14 +1,15 @@
 package committee.nova.keywizard.gui;
 
-import committee.nova.keywizard.util.KeybindUtils;
-import committee.nova.mkb.api.IKeyBinding;
+import java.util.Arrays;
+import java.util.Objects;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 
-import java.util.Arrays;
-import java.util.Objects;
+import committee.nova.keywizard.util.KeybindUtils;
+import committee.nova.mkb.api.IKeyBinding;
 
 public class GuiBindingList extends GuiScrollingList {
 
@@ -22,8 +23,18 @@ public class GuiBindingList extends GuiScrollingList {
     private int selectedKeybindId;
 
     public GuiBindingList(GuiKeyWizard parent, int left, int bottom, int width, int height, int entryHeight) {
-        //Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight, int screenWidth, int screenHeight
-        super(parent.getClient(), width, height, bottom - height, bottom, left, entryHeight, parent.width, parent.height);
+        // Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight, int screenWidth, int
+        // screenHeight
+        super(
+            parent.getClient(),
+            width,
+            height,
+            bottom - height,
+            bottom,
+            left,
+            entryHeight,
+            parent.width,
+            parent.height);
 
         this.parent = parent;
         this.bindings = Arrays.copyOf(KeybindUtils.ALL_BINDINGS, KeybindUtils.ALL_BINDINGS.length);
@@ -48,17 +59,21 @@ public class GuiBindingList extends GuiScrollingList {
     }
 
     @Override
-    protected void drawBackground() {
-    }
+    protected void drawBackground() {}
 
     @Override
     protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
         FontRenderer fontRender = this.parent.getFontRenderer();
         KeyBinding currentBinding = this.bindings[slotIdx];
 
-        fontRender.drawStringWithShadow(I18n.format(currentBinding.getKeyDescription()), this.left + 3, slotTop, 0xFFFFFF);
+        fontRender
+            .drawStringWithShadow(I18n.format(currentBinding.getKeyDescription()), this.left + 3, slotTop, 0xFFFFFF);
 
-        fontRender.drawStringWithShadow("(" + I18n.format(currentBinding.getKeyCategory()) + ")", this.left + 3, slotTop + fontRender.FONT_HEIGHT + 2, 0x444444);
+        fontRender.drawStringWithShadow(
+            "(" + I18n.format(currentBinding.getKeyCategory()) + ")",
+            this.left + 3,
+            slotTop + fontRender.FONT_HEIGHT + 2,
+            0x444444);
         int color;
         final IKeyBinding mixined = (IKeyBinding) currentBinding;
         if (currentBinding.getKeyCode() == 0 || KeybindUtils.getNumConficts(currentBinding) > 0) {
@@ -68,11 +83,16 @@ public class GuiBindingList extends GuiScrollingList {
         } else {
             color = 0x999999;
         }
-        fontRender.drawStringWithShadow(mixined.getDisplayName(), this.left + 3, slotTop + fontRender.FONT_HEIGHT * 2 + 3, color);
+        fontRender.drawStringWithShadow(
+            mixined.getDisplayName(),
+            this.left + 3,
+            slotTop + fontRender.FONT_HEIGHT * 2 + 3,
+            color);
     }
 
     protected void updateList() {
-        if (!this.searchText.equals(this.parent.getSearchText()) || !this.selectedCategory.equals(this.parent.getSelectedCategory())) {
+        if (!this.searchText.equals(this.parent.getSearchText())
+            || !this.selectedCategory.equals(this.parent.getSelectedCategory())) {
             this.searchText = this.parent.getSearchText();
             this.selectedCategory = this.parent.getSelectedCategory();
             KeyBinding[] bindingsNew = bindingsByCategory(this.selectedCategory);
@@ -88,8 +108,7 @@ public class GuiBindingList extends GuiScrollingList {
 
             this.bindings = bindingsNew;
 
-            if (this.bindings.length != 0)
-                this.selectKeybind(0);
+            if (this.bindings.length != 0) this.selectKeybind(0);
         }
         Arrays.sort(this.bindings, this.parent.sortType);
     }
@@ -107,29 +126,44 @@ public class GuiBindingList extends GuiScrollingList {
             case "categories.all":
                 return bindings;
             case "categories.conflicts":
-                return Arrays.stream(bindings).filter(binding -> KeybindUtils.getNumConficts(binding) >= 1 && binding.getKeyCode() != 0).toArray(KeyBinding[]::new);
+                return Arrays.stream(bindings)
+                    .filter(binding -> KeybindUtils.getNumConficts(binding) >= 1 && binding.getKeyCode() != 0)
+                    .toArray(KeyBinding[]::new);
             case "categories.unbound":
-                return Arrays.stream(bindings).filter(binding -> binding.getKeyCode() == 0).toArray(KeyBinding[]::new);
+                return Arrays.stream(bindings)
+                    .filter(binding -> binding.getKeyCode() == 0)
+                    .toArray(KeyBinding[]::new);
             default:
-                return Arrays.stream(bindings).filter(binding -> Objects.equals(binding.getKeyCategory(), category)).toArray(KeyBinding[]::new);
+                return Arrays.stream(bindings)
+                    .filter(binding -> Objects.equals(binding.getKeyCategory(), category))
+                    .toArray(KeyBinding[]::new);
         }
     }
 
     private KeyBinding[] filterBindingsByName(KeyBinding[] bindings, String[] words) {
         KeyBinding[] filtered;
-        filtered = Arrays.stream(bindings).filter(binding -> {
-            boolean flag = true;
-            for (String w : words) {
-                flag = flag && I18n.format(binding.getKeyDescription()).toLowerCase().contains(w.toLowerCase());
-            }
-            return flag;
-        }).toArray(KeyBinding[]::new);
+        filtered = Arrays.stream(bindings)
+            .filter(binding -> {
+                boolean flag = true;
+                for (String w : words) {
+                    flag = flag && I18n.format(binding.getKeyDescription())
+                        .toLowerCase()
+                        .contains(w.toLowerCase());
+                }
+                return flag;
+            })
+            .toArray(KeyBinding[]::new);
         return filtered;
     }
 
     private KeyBinding[] filterBindingsByKey(KeyBinding[] bindings, String keyName) {
         KeyBinding[] filtered;
-        filtered = Arrays.stream(bindings).filter(binding -> ((IKeyBinding) binding).getDisplayName().toLowerCase().contains(keyName.toLowerCase())).toArray(KeyBinding[]::new);
+        filtered = Arrays.stream(bindings)
+            .filter(
+                binding -> ((IKeyBinding) binding).getDisplayName()
+                    .toLowerCase()
+                    .contains(keyName.toLowerCase()))
+            .toArray(KeyBinding[]::new);
         return filtered;
     }
 
