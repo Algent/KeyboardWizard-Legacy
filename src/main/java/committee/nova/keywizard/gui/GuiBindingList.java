@@ -8,8 +8,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 
+import com.blamejared.controlling.keybinding.ComboKeyBinding;
 import committee.nova.keywizard.util.KeybindUtils;
-import committee.nova.mkb.api.IKeyBinding;
 
 public class GuiBindingList extends GuiScrollingList {
 
@@ -75,16 +75,16 @@ public class GuiBindingList extends GuiScrollingList {
             slotTop + fontRender.FONT_HEIGHT + 2,
             0x444444);
         int color;
-        final IKeyBinding mixined = (IKeyBinding) currentBinding;
+        final ComboKeyBinding mixined = (ComboKeyBinding) currentBinding;
         if (currentBinding.getKeyCode() == 0 || KeybindUtils.getNumConficts(currentBinding) > 0) {
             color = 0x993333;
-        } else if (!mixined.isSetToDefaultValue()) {
+        } else if (!mixined.controlling$isSetToDefaultValue()) {
             color = 0x339933;
         } else {
             color = 0x999999;
         }
         fontRender.drawStringWithShadow(
-            mixined.getDisplayName(),
+            mixined.controlling$getDisplayName(),
             this.left + 3,
             slotTop + fontRender.FONT_HEIGHT * 2 + 3,
             color);
@@ -160,7 +160,7 @@ public class GuiBindingList extends GuiScrollingList {
         KeyBinding[] filtered;
         filtered = Arrays.stream(bindings)
             .filter(
-                binding -> ((IKeyBinding) binding).getDisplayName()
+                binding -> ((ComboKeyBinding) binding).controlling$getDisplayName()
                     .toLowerCase()
                     .contains(keyName.toLowerCase()))
             .toArray(KeyBinding[]::new);

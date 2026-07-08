@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 
-import committee.nova.mkb.api.IKeyBinding;
-import committee.nova.mkb.keybinding.KeyModifier;
+import com.blamejared.controlling.keybinding.ComboKeyBinding;
+import com.blamejared.controlling.keybinding.KeyModifier;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -27,7 +27,8 @@ public class KeybindUtils {
         if (keyId == 0) return bindingNames;
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
-            if (currentBinding.getKeyCode() == keyId && ((IKeyBinding) currentBinding).getKeyModifier() == modifier)
+            if (currentBinding.getKeyCode() == keyId
+                && ((ComboKeyBinding) currentBinding).controlling$getKeyModifier() == modifier)
                 bindingNames.add(I18n.format(currentBinding.getKeyDescription()));
         }
         return bindingNames;
@@ -39,7 +40,8 @@ public class KeybindUtils {
         if (keyId == 0) return bindingNames;
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
-            if (currentBinding.getKeyCode() == keyId && ((IKeyBinding) currentBinding).getKeyModifier() == modifier)
+            if (currentBinding.getKeyCode() == keyId
+                && ((ComboKeyBinding) currentBinding).controlling$getKeyModifier() == modifier)
                 bindingNames.add(
                     I18n.format(currentBinding.getKeyDescription()) + " ("
                         + I18n.format(currentBinding.getKeyCategory())
@@ -54,8 +56,8 @@ public class KeybindUtils {
         if (keyId == 0) return num;
 
         for (KeyBinding currentBinding : ALL_BINDINGS) {
-            if (currentBinding.getKeyCode() == keyId && ((IKeyBinding) currentBinding).getKeyModifier() == modifier)
-                num++;
+            if (currentBinding.getKeyCode() == keyId
+                && ((ComboKeyBinding) currentBinding).controlling$getKeyModifier() == modifier) num++;
         }
         return num;
     }
@@ -70,7 +72,8 @@ public class KeybindUtils {
         for (KeyBinding currentBinding : ALL_BINDINGS) {
             if (!(currentBinding == binding)) {
                 if (currentBinding.getKeyCode() == binding.getKeyCode()
-                    && ((IKeyBinding) currentBinding).getKeyModifier() == ((IKeyBinding) binding).getKeyModifier())
+                    && ((ComboKeyBinding) currentBinding).controlling$getKeyModifier()
+                        == ((ComboKeyBinding) binding).controlling$getKeyModifier())
                     num++;
             }
         }

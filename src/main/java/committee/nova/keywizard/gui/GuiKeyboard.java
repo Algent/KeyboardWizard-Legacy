@@ -12,10 +12,10 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import com.blamejared.controlling.keybinding.ComboKeyBinding;
 import committee.nova.keywizard.util.GuiUtils;
 import committee.nova.keywizard.util.KeyHelper;
 import committee.nova.keywizard.util.KeybindUtils;
-import committee.nova.mkb.api.IKeyBinding;
 
 public class GuiKeyboard extends FloatGui {
 
@@ -179,8 +179,8 @@ public class GuiKeyboard extends FloatGui {
                 if (GuiScreen.isShiftKeyDown()) {
                     parent.setSearchText("@" + getKeyName(this.keyCode));
                 } else {
-                    ((IKeyBinding) parent.getSelectedKeybind())
-                        .setKeyModifierAndCode(parent.getActiveModifier(), this.keyCode);
+                    ((ComboKeyBinding) parent.getSelectedKeybind())
+                        .controlling$setKeyModifierAndCode(parent.getActiveModifier(), this.keyCode);
                     mc.gameSettings.setOptionKeyBinding(parent.getSelectedKeybind(), this.keyCode);
                     KeyBinding.resetKeyBindingArrayAndHash();
                 }

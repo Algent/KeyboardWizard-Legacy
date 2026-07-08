@@ -18,12 +18,12 @@ import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.input.Mouse;
 
+import com.blamejared.controlling.keybinding.ComboKeyBinding;
+import com.blamejared.controlling.keybinding.KeyModifier;
 import committee.nova.keywizard.config.KeyWizardConfig;
 import committee.nova.keywizard.util.KeybindUtils;
 import committee.nova.keywizard.util.KeyboardFactory;
 import committee.nova.keywizard.util.KeyboardLayout;
-import committee.nova.mkb.api.IKeyBinding;
-import committee.nova.mkb.keybinding.KeyModifier;
 
 public class GuiKeyWizard extends GuiScreen {
 
@@ -48,8 +48,8 @@ public class GuiKeyWizard extends GuiScreen {
 
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
-                return I18n.format(((IKeyBinding) arg0).getDisplayName())
-                    .compareTo(I18n.format(((IKeyBinding) arg1).getDisplayName()));
+                return I18n.format(((ComboKeyBinding) arg0).controlling$getDisplayName())
+                    .compareTo(I18n.format(((ComboKeyBinding) arg1).controlling$getDisplayName()));
             }
         }
 
@@ -97,10 +97,10 @@ public class GuiKeyWizard extends GuiScreen {
         int maxBindingLength = 0;
 
         for (KeyBinding binding : KeybindUtils.ALL_BINDINGS) {
-            final IKeyBinding mixined = (IKeyBinding) binding;
-            if (mixined.getDisplayName()
+            final ComboKeyBinding mixined = (ComboKeyBinding) binding;
+            if (mixined.controlling$getDisplayName()
                 .length() > maxBindingLength)
-                maxBindingLength = mixined.getDisplayName()
+                maxBindingLength = mixined.controlling$getDisplayName()
                     .length();
         }
 
@@ -207,7 +207,7 @@ public class GuiKeyWizard extends GuiScreen {
         super.updateScreen();
         this.searchBar.updateCursorCounter();
         if (this.buttonReset != null)
-            this.buttonReset.enabled = !((IKeyBinding) this.selectedKeybind).isSetToDefaultValue();
+            this.buttonReset.enabled = !((ComboKeyBinding) this.selectedKeybind).controlling$isSetToDefaultValue();
         if (this.buttonClear != null) {
             this.buttonClear.enabled = !(this.selectedKeybind.getKeyCode() == 0);
         }
@@ -281,16 +281,16 @@ public class GuiKeyWizard extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (!this.categoryList.getExtended()) {
-            final IKeyBinding mixined = (IKeyBinding) this.selectedKeybind;
+            final ComboKeyBinding mixined = (ComboKeyBinding) this.selectedKeybind;
             if (button == this.buttonReset) {
-                mixined.setToDefault();
+                mixined.controlling$setToDefault();
                 KeyBinding.resetKeyBindingArrayAndHash();
-                this.buttonReset.enabled = !mixined.isSetToDefaultValue();
+                this.buttonReset.enabled = !mixined.controlling$isSetToDefaultValue();
                 return;
             }
 
             if (button == this.buttonClear) {
-                mixined.setKeyModifierAndCode(KeyModifier.NONE, 0);
+                mixined.controlling$setKeyModifierAndCode(KeyModifier.NONE, 0);
                 KeyBinding.resetKeyBindingArrayAndHash();
                 this.buttonClear.enabled = this.selectedKeybind.getKeyCode() != 0;
             }
@@ -318,7 +318,7 @@ public class GuiKeyWizard extends GuiScreen {
             }
 
             if (button == this.buttonMouse) {
-                mixined.setKeyModifierAndCode(this.activeModifier, -100 + this.mouse);
+                mixined.controlling$setKeyModifierAndCode(this.activeModifier, -100 + this.mouse);
                 mc.gameSettings.setOptionKeyBinding(this.selectedKeybind, -100 + this.mouse);
                 KeyBinding.resetKeyBindingArrayAndHash();
             }
@@ -339,7 +339,7 @@ public class GuiKeyWizard extends GuiScreen {
                 }
             }
 
-            this.buttonReset.enabled = !mixined.isSetToDefaultValue();
+            this.buttonReset.enabled = !mixined.controlling$isSetToDefaultValue();
         }
     }
 
