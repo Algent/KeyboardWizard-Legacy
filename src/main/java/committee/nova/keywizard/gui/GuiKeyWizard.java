@@ -1,7 +1,6 @@
 package committee.nova.keywizard.gui;
 
 import static org.lwjgl.input.Keyboard.*;
-import static org.lwjgl.input.Mouse.getButtonName;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -143,12 +143,23 @@ public class GuiKeyWizard extends GuiScreen {
 
         int maxCategoryLength = 0;
         for (String s : categories) {
-            if (I18n.format(s)
-                .length() > maxCategoryLength) maxCategoryLength = s.length();
+            maxCategoryLength = Math.max(
+                maxCategoryLength,
+                I18n.format(s)
+                    .length());
         }
 
-        int categoryListWidth = maxCategoryLength * 9;
-        this.categoryList = new GuiCategorySelector(this, this.guiStartX, 5, categoryListWidth, categories);
+        int categoryNameWidth = maxCategoryLength * 9;
+        // Cap the button so the sort and page buttons always fit on the top row; the dropdown may be wider
+        int categoryButtonWidth = Math.max(80, Math.min(categoryNameWidth, this.width - this.guiStartX - 230));
+        int categoryDropdownWidth = Math.min(categoryNameWidth, this.width - this.guiStartX - 10);
+        this.categoryList = new GuiCategorySelector(
+            this,
+            this.guiStartX,
+            5,
+            categoryButtonWidth,
+            categoryDropdownWidth,
+            categories);
         this.selectedCategory = this.categoryList.getSelctedCategory();
 
         this.keyboard = KeyboardFactory.makeKeyboard(
@@ -188,12 +199,12 @@ public class GuiKeyWizard extends GuiScreen {
             this.height - 85,
             100,
             20,
-            I18n.format("gui.mouse") + ": " + getButtonName(this.mouse));
+            I18n.format("gui.mouse") + ": " + this.getMouseButtonName());
         this.buttonMousePlus = new GuiButton(0, this.guiStartX + 126, this.height - 85, 25, 20, "+");
         this.buttonMouseMinus = new GuiButton(0, this.guiStartX, this.height - 85, 25, 20, "-");
         this.buttonSortBy = new GuiButton(
             0,
-            this.guiStartX + categoryListWidth + 5,
+            this.guiStartX + categoryButtonWidth + 5,
             5,
             110,
             20,
@@ -281,17 +292,17 @@ public class GuiKeyWizard extends GuiScreen {
 
         switch (KeybindUtils.getNumBindings(-100 + this.mouse, this.activeModifier)) {
             case 0:
-                this.buttonMouse.displayString = I18n.format("gui.mouse") + ": " + getButtonName(this.mouse);
+                this.buttonMouse.displayString = I18n.format("gui.mouse") + ": " + this.getMouseButtonName();
                 break;
             case 1:
                 this.buttonMouse.displayString = I18n.format("gui.mouse") + ": "
                     + EnumChatFormatting.GREEN
-                    + getButtonName(this.mouse);
+                    + this.getMouseButtonName();
                 break;
             default:
                 this.buttonMouse.displayString = I18n.format("gui.mouse") + ": "
                     + EnumChatFormatting.RED
-                    + getButtonName(this.mouse);
+                    + this.getMouseButtonName();
                 break;
         }
 
@@ -414,6 +425,14 @@ public class GuiKeyWizard extends GuiScreen {
         }
 
         this.buttonActiveModifier.displayString = I18n.format("gui.activeModifier") + ": " + activeModifier.toString();
+    }
+
+    /**
+     * Display name of the currently browsed mouse button, using the same 1-indexed naming ("Button 1", "Button 2",
+     * ...) that vanilla uses everywhere a mouse binding is shown.
+     */
+    private String getMouseButtonName() {
+        return GameSettings.getKeyDisplayString(-100 + this.mouse);
     }
 
     public Minecraft getClient() {

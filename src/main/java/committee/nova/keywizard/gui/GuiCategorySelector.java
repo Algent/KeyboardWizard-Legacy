@@ -78,14 +78,15 @@ public class GuiCategorySelector extends GuiButton {
 
     }
 
-    public GuiCategorySelector(GuiKeyWizard parent, int x, int y, int width, ArrayList<String> categories) {
-        super(0, x, y, width, 20, I18n.format(categories.get(0)));
+    public GuiCategorySelector(GuiKeyWizard parent, int x, int y, int buttonWidth, int listWidth,
+        ArrayList<String> categories) {
+        super(0, x, y, buttonWidth, 20, I18n.format(categories.get(0)));
         this.parent = parent;
         this.categories = categories;
         this.selectedCategoryIdx = 0;
         this.selectedCategory = this.categories.get(0);
         int fontHeight = parent.getFontRenderer().FONT_HEIGHT;
-        this.list = new GuiCategoryList(parent, x, y + 20, width, parent.height - 40, fontHeight + 7);
+        this.list = new GuiCategoryList(parent, x, y + 20, listWidth, parent.height - 40, fontHeight + 7);
     }
 
     @Override
