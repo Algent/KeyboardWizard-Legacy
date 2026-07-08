@@ -20,6 +20,7 @@ import org.lwjgl.input.Mouse;
 
 import com.blamejared.controlling.keybinding.ComboKeyBinding;
 import com.blamejared.controlling.keybinding.KeyModifier;
+import committee.nova.keywizard.KeyWizard;
 import committee.nova.keywizard.config.KeyWizardConfig;
 import committee.nova.keywizard.util.KeybindUtils;
 import committee.nova.keywizard.util.KeyboardFactory;
@@ -54,8 +55,6 @@ public class GuiKeyWizard extends GuiScreen {
         }
 
     }
-
-    public KeyboardLayout layout = KeyWizardConfig.layout;
 
     protected GuiKeyboard keyboard;
     protected SortType sortType = SortType.NAME;
@@ -354,7 +353,7 @@ public class GuiKeyWizard extends GuiScreen {
         try {
             this.categoryList.handleMouseInput(mouseX, mouseY);
         } catch (IOException e) {
-            e.printStackTrace();
+            KeyWizard.LOGGER.error("Failed to handle mouse input in the category list", e);
         }
     }
 

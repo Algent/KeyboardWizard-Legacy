@@ -25,8 +25,6 @@ public class GuiKeyboard extends FloatGui {
 
     protected HashMap<Integer, GuiKeyboardKey> keyList = new HashMap<>();
 
-    private double scaleFactor;
-
     public GuiKeyboard(GuiKeyWizard parent, double anchorX, double anchorY) {
         this.parent = parent;
         this.anchorX = anchorX;
@@ -70,42 +68,6 @@ public class GuiKeyboard extends FloatGui {
 
     public void enableKey(int keyCode) {
         if (this.HasKey(keyCode)) this.keyList.get(keyCode).enabled = true;
-    }
-
-    /**
-     * Returns the width of the keyboard. Currently unused.
-     *
-     * @return the width of the keyboard
-     */
-    public double width() {
-        double width = 0;
-        for (GuiKeyboardKey k : this.keyList.values()) {
-            if (k.absX() + k.width > width) {
-                width = k.absX() + k.width;
-            }
-        }
-        return width;
-    }
-
-    public double getScaleFactor() {
-        return this.scaleFactor;
-    }
-
-    public void setScaleFactor(double scaleFactor) {
-        this.scaleFactor = scaleFactor;
-        for (GuiKeyboardKey k : this.keyList.values()) {
-            k.width = k.width * scaleFactor;
-            k.height = k.height * scaleFactor;
-            k.x = k.x * scaleFactor;
-            k.y = k.y * scaleFactor;
-        }
-    }
-
-    public void setZLevel(float zLevel) {
-        this.zLevel = zLevel;
-        for (GuiKeyboardKey k : this.keyList.values()) {
-            k.zLevel = this.zLevel;
-        }
     }
 
     public boolean HasKey(int keyCode) {

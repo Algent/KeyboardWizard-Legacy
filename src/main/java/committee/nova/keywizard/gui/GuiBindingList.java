@@ -99,7 +99,7 @@ public class GuiBindingList extends GuiScrollingList {
             String[] words = this.searchText.split("\\s+");
 
             if (words.length != 0) {
-                if (words[0].length() > 0 && words[0].charAt(0) == '@') {
+                if (!words[0].isEmpty() && words[0].charAt(0) == '@') {
                     bindingsNew = filterBindingsByKey(bindingsNew, words[0].substring(1));
                     words[0] = "";
                 }

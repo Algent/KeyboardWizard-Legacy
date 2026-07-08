@@ -26,14 +26,14 @@ public class ClientForgeEventHandler {
 
     private static final int OPEN_KEYWIZARD_ID = 203;
 
+    @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void controlsGuiInit(InitGuiEvent.Post e) {
         if (KeyWizardConfig.canOpenFromControlsGui() && e.gui instanceof GuiControls) {
             int width = e.gui.width;
             int buttonY = 0;
             for (Object b : e.buttonList) {
-                if (!(b instanceof GuiButton)) continue;
-                final GuiButton button = (GuiButton) b;
+                if (!(b instanceof GuiButton button)) continue;
                 if (button.id == VANILLA_DONE_ID || button.id == CONTROLLING_DONE_ID) {
                     button.width = 100;
                     button.xPosition = width / 2 + 60;

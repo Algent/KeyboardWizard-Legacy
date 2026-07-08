@@ -63,7 +63,7 @@ public class KeyboardFactory {
 
         currentY += keyHeight + keySpacing;
         keyWidth = width / 7 - keySpacing;
-        currentX = addHorizontalRow(
+        addHorizontalRow(
             kb,
             new int[] { KEY_LCONTROL, KEY_LMETA, KEY_LMENU, KEY_SPACE, KEY_RMENU, KEY_RMETA, KEY_RCONTROL },
             0,
@@ -112,47 +112,43 @@ public class KeyboardFactory {
 
     private static GuiKeyboard makeAuxiliary(GuiKeyWizard parent, double x, double y, double width, double height) {
         GuiKeyboard kb = new GuiKeyboard(parent, x, y);
-        double currentX = 0;
         double currentY = 0;
 
         double keySpacing = 5;
         double keyWidth = width / 5 - keySpacing;
         double keyHeight = height / 14;
 
-        currentX = addHorizontalRow(
+        addHorizontalRow(
             kb,
             new int[] { KEY_SYSRQ, KEY_SCROLL, KEY_PAUSE, KEY_F13, KEY_F14 },
-            currentX,
+            0,
             currentY,
             keyWidth,
             keyHeight,
             keySpacing);
-        currentX = 0;
         currentY += keyHeight + keySpacing;
-        currentX = addHorizontalRow(
+        addHorizontalRow(
             kb,
             new int[] { KEY_INSERT, KEY_HOME, KEY_PRIOR, KEY_F15, KEY_F16 },
-            currentX,
+            0,
             currentY,
             keyWidth,
             keyHeight,
             keySpacing);
-        currentX = 0;
         currentY += keyHeight + keySpacing;
-        currentX = addHorizontalRow(
+        addHorizontalRow(
             kb,
             new int[] { KEY_DELETE, KEY_END, KEY_NEXT, KEY_F17, KEY_F18 },
-            currentX,
+            0,
             currentY,
             keyWidth,
             keyHeight,
             keySpacing);
-        currentX = 0;
         currentY += keyHeight + keySpacing;
-        currentX = addHorizontalRow(
+        addHorizontalRow(
             kb,
             new int[] { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_F19 },
-            currentX,
+            0,
             currentY,
             keyWidth,
             keyHeight,

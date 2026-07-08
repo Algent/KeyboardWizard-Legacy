@@ -16,24 +16,11 @@ public class KeybindUtils {
         .getClient().gameSettings.keyBindings;
 
     /**
-     * Get the names of all bindings for a certain key and modifier
+     * Get the names and categories of all bindings for a certain key and modifier
      *
      * @param keyId    the LWJGL code of the key to get the binding names for
      * @param modifier the modifier of the key to get the binding names for
      */
-    public static ArrayList<String> getBindingNames(int keyId, KeyModifier modifier) {
-        ArrayList<String> bindingNames = new ArrayList<>();
-
-        if (keyId == 0) return bindingNames;
-
-        for (KeyBinding currentBinding : ALL_BINDINGS) {
-            if (currentBinding.getKeyCode() == keyId
-                && ((ComboKeyBinding) currentBinding).controlling$getKeyModifier() == modifier)
-                bindingNames.add(I18n.format(currentBinding.getKeyDescription()));
-        }
-        return bindingNames;
-    }
-
     public static ArrayList<String> getBindingNamesAndCategories(int keyId, KeyModifier modifier) {
         ArrayList<String> bindingNames = new ArrayList<>();
 

@@ -1,10 +1,7 @@
 package committee.nova.keywizard.gui;
 
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 
@@ -18,31 +15,18 @@ public abstract class GuiScrollingList {
     private final Minecraft client;
     protected final int listWidth;
     protected final int listHeight;
-    protected final int screenWidth;
-    protected final int screenHeight;
     protected final int top;
     protected final int bottom;
     protected final int right;
     protected final int left;
     protected final int slotHeight;
-    private int scrollUpActionId;
-    private int scrollDownActionId;
-    protected int mouseX;
-    protected int mouseY;
     private float initialMouseClickY = -2.0F;
     private float scrollFactor;
     private float scrollDistance;
     protected int selectedIndex = -1;
     private long lastClickTime = 0L;
-    private boolean highlightSelected = true;
     private boolean hasHeader;
     private int headerHeight;
-    protected boolean captureMouse = true;
-
-    @Deprecated // We need to know screen size.
-    public GuiScrollingList(Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight) {
-        this(client, width, height, top, bottom, left, entryHeight, width, height);
-    }
 
     public GuiScrollingList(Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight,
         int screenWidth, int screenHeight) {
@@ -54,18 +38,6 @@ public abstract class GuiScrollingList {
         this.slotHeight = entryHeight;
         this.left = left;
         this.right = width + this.left;
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-    }
-
-    @Deprecated // Unused, remove in 1.9.3?
-    public void func_27258_a(boolean p_27258_1_) {
-        this.highlightSelected = p_27258_1_;
-    }
-
-    @Deprecated
-    protected void func_27259_a(boolean hasFooter, int footerHeight) {
-        setHeaderInfo(hasFooter, footerHeight);
     }
 
     protected void setHeaderInfo(boolean hasHeader, int headerHeight) {
@@ -121,22 +93,6 @@ public abstract class GuiScrollingList {
         func_27257_b(mouseX, mouseY);
     }
 
-    @Deprecated // Unused, Remove in 1.9.3?
-    public int func_27256_c(int x, int y) {
-        int left = this.left + 1;
-        int right = this.left + this.listWidth - 7;
-        int relativeY = y - this.top - this.headerHeight + (int) this.scrollDistance - 4;
-        int entryIndex = relativeY / this.slotHeight;
-        return x >= left && x <= right && entryIndex >= 0 && relativeY >= 0 && entryIndex < this.getSize() ? entryIndex
-            : -1;
-    }
-
-    // FIXME: is this correct/still needed?
-    public void registerScrollButtons(List<GuiButton> buttons, int upActionID, int downActionID) {
-        this.scrollUpActionId = upActionID;
-        this.scrollDownActionId = downActionID;
-    }
-
     private void applyScrollLimits() {
         int listHeight = this.getContentHeight() - (this.bottom - this.top - 4);
 
@@ -153,20 +109,6 @@ public abstract class GuiScrollingList {
         }
     }
 
-    public void actionPerformed(GuiButton button) {
-        if (button.enabled) {
-            if (button.id == this.scrollUpActionId) {
-                this.scrollDistance -= (float) (this.slotHeight * 2 / 3);
-                this.initialMouseClickY = -2.0F;
-                this.applyScrollLimits();
-            } else if (button.id == this.scrollDownActionId) {
-                this.scrollDistance += (float) (this.slotHeight * 2 / 3);
-                this.initialMouseClickY = -2.0F;
-                this.applyScrollLimits();
-            }
-        }
-    }
-
     public void handleMouseInput(int mouseX, int mouseY) {
         boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.listWidth
             && mouseY >= this.top
@@ -180,8 +122,6 @@ public abstract class GuiScrollingList {
     }
 
     public void drawScreen(int mouseX, int mouseY) {
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
         this.drawBackground();
 
         boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.listWidth
@@ -302,7 +242,7 @@ public abstract class GuiScrollingList {
             int slotBuffer = this.slotHeight - border;
 
             if (slotTop <= this.bottom && slotTop + slotBuffer >= this.top) {
-                if (this.highlightSelected && this.isSelected(slotIdx)) {
+                if (this.isSelected(slotIdx)) {
                     int min = this.left;
                     int max = entryRight;
                     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
