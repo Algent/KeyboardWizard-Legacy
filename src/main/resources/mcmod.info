@@ -1,19 +1,17 @@
-[
-  {
-    "modid": "keywizard",
-    "name": "Keyboard Wizard",
-    "description": "Keyboard Wizard for legacy versions",
-    "version": "${version}",
-    "mcversion": "${mcversion}",
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "${modId}",
+    "name": "${modName}",
+    "description": "Keyboard Wizard for legacy versions.",
+    "version": "${modVersion}",
+    "mcversion": "${minecraftVersion}",
     "url": "",
     "updateUrl": "",
-    "authorList": [
-      "MrNerdy42",
-      "Tapio"
-    ],
+    "authorList": ["MrNerdy42", "Tapio"],
     "credits": "",
     "logoFile": "",
     "screenshots": [],
-    "dependencies": []
-  }
-]
+    "parent": ""
+  }]
+}
