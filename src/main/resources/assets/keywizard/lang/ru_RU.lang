@@ -13,5 +13,9 @@ gui.clearBinding=Убрать назначение
 gui.activeModifier=Модификатор
 gui.bindingCategories=категории
 gui.page=страница
+gui.sortBy=Сорт.
+gui.sort.name=Имя
+gui.sort.category=Категория
+gui.sort.key=Клавиша
 
 keywizard.keybind.openKeyboardWizard=Открыть Умный менеджер Клавиш

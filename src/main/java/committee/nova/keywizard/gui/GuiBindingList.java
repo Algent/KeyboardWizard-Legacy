@@ -111,6 +111,9 @@ public class GuiBindingList extends GuiScrollingList {
             if (this.bindings.length != 0) this.selectKeybind(0);
         }
         Arrays.sort(this.bindings, this.parent.sortType);
+        // Keep the highlight on the selected binding, as sorting may move it to another row
+        this.selectedKeybindId = Arrays.asList(this.bindings)
+            .indexOf(this.selectedKeybind);
     }
 
     private void selectKeybind(int id) {

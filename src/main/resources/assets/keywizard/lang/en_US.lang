@@ -14,5 +14,9 @@ gui.activeModifier=Active Modifier
 gui.bindingCategories=Binding Categories
 gui.page=Page
 gui.mouse=Mouse
+gui.sortBy=Sort
+gui.sort.name=Name
+gui.sort.category=Category
+gui.sort.key=Key
 
 keywizard.keybind.openKeyboardWizard=Open Key Wizard

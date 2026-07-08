@@ -29,7 +29,8 @@ import committee.nova.keywizard.util.KeyboardLayout;
 public class GuiKeyWizard extends GuiScreen {
 
     private enum SortType implements Comparator<KeyBinding> {
-        NAME {
+
+        NAME("gui.sort.name") {
 
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
@@ -37,7 +38,7 @@ public class GuiKeyWizard extends GuiScreen {
                     .compareTo(I18n.format(arg1.getKeyDescription()));
             }
         },
-        CATEGORY {
+        CATEGORY("gui.sort.category") {
 
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
@@ -45,15 +46,30 @@ public class GuiKeyWizard extends GuiScreen {
                     .compareTo(I18n.format(arg1.getKeyCategory()));
             }
         },
-        KEY {
+        KEY("gui.sort.key") {
 
             @Override
             public int compare(KeyBinding arg0, KeyBinding arg1) {
                 return I18n.format(((ComboKeyBinding) arg0).controlling$getDisplayName())
                     .compareTo(I18n.format(((ComboKeyBinding) arg1).controlling$getDisplayName()));
             }
+        };
+
+        private static final SortType[] VALUES = values();
+
+        private final String nameKey;
+
+        SortType(String nameKey) {
+            this.nameKey = nameKey;
         }
 
+        public String getDisplayName() {
+            return I18n.format(nameKey);
+        }
+
+        public SortType next() {
+            return VALUES[(this.ordinal() + 1) % VALUES.length];
+        }
     }
 
     protected GuiKeyboard keyboard;
@@ -61,7 +77,7 @@ public class GuiKeyWizard extends GuiScreen {
 
     private final GuiScreen parentScreen;
 
-    private final KeyboardLayout[] pages = { KeyWizardConfig.layout, KeyboardLayout.NUMPAD, KeyboardLayout.AUXILIARY };
+    private final KeyboardLayout[] pages = { KeyboardLayout.QWERTY, KeyboardLayout.NUMPAD, KeyboardLayout.AUXILIARY };
     private int pageNum = 0;
     private int mouse = 0;
     private int maxMouse = KeyWizardConfig.getMaxMouseButtons() - 1;
@@ -131,7 +147,8 @@ public class GuiKeyWizard extends GuiScreen {
                 .length() > maxCategoryLength) maxCategoryLength = s.length();
         }
 
-        this.categoryList = new GuiCategorySelector(this, this.guiStartX, 5, maxCategoryLength * 9, categories);
+        int categoryListWidth = maxCategoryLength * 9;
+        this.categoryList = new GuiCategorySelector(this, this.guiStartX, 5, categoryListWidth, categories);
         this.selectedCategory = this.categoryList.getSelctedCategory();
 
         this.keyboard = KeyboardFactory.makeKeyboard(
@@ -174,7 +191,13 @@ public class GuiKeyWizard extends GuiScreen {
             I18n.format("gui.mouse") + ": " + getButtonName(this.mouse));
         this.buttonMousePlus = new GuiButton(0, this.guiStartX + 126, this.height - 85, 25, 20, "+");
         this.buttonMouseMinus = new GuiButton(0, this.guiStartX, this.height - 85, 25, 20, "-");
-        // this.buttonSortBy = new GuiButton(0, this.searchBar.x + 10, this.height - 20, 20, 14, "Cat");
+        this.buttonSortBy = new GuiButton(
+            0,
+            this.guiStartX + categoryListWidth + 5,
+            5,
+            110,
+            20,
+            I18n.format("gui.sortBy") + ": " + this.sortType.getDisplayName());
 
         this.setSelectedKeybind(this.bindingList.getSelectedKeybind());
 
@@ -186,8 +209,7 @@ public class GuiKeyWizard extends GuiScreen {
         this.buttonList.add(this.buttonMouse);
         this.buttonList.add(this.buttonMousePlus);
         this.buttonList.add(this.buttonMouseMinus);
-        // this.buttonList.add(this.buttonSortBy);
-
+        this.buttonList.add(this.buttonSortBy);
     }
 
     @Override
@@ -300,6 +322,11 @@ public class GuiKeyWizard extends GuiScreen {
 
             if (button == this.buttonActiveModifier) {
                 this.changeActiveModifier();
+            }
+
+            if (button == this.buttonSortBy) {
+                this.sortType = this.sortType.next();
+                this.buttonSortBy.displayString = I18n.format("gui.sortBy") + ": " + this.sortType.getDisplayName();
             }
 
             if (button == this.buttonPage) {
