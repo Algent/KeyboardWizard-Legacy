@@ -1,11 +1,8 @@
 package committee.nova.keywizard.config;
 
 import java.io.File;
-import java.util.Objects;
 
 import net.minecraftforge.common.config.Configuration;
-
-import committee.nova.keywizard.util.KeyboardLayout;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -14,7 +11,6 @@ public class KeyWizardConfig {
     public static Configuration config;
     private static boolean openFromControlsGui;
     private static int maxMouseButtons;
-    private static String layoutStr;
 
     public static void init(FMLPreInitializationEvent event) {
         config = new Configuration(new File(event.getModConfigurationDirectory(), "KeyboardWizard.cfg"));
@@ -31,8 +27,6 @@ public class KeyWizardConfig {
             3,
             15,
             "The number of mouse buttons to show (default:5).");
-        layoutStr = config
-            .getString("layout", Configuration.CATEGORY_GENERAL, "QWERTY", "Valid values: QWERTY, NUMPAD, AUXILIARY");
         config.save();
     }
 
@@ -43,13 +37,4 @@ public class KeyWizardConfig {
     public static boolean canOpenFromControlsGui() {
         return openFromControlsGui;
     }
-
-    public static KeyboardLayout getLayout() {
-        for (final KeyboardLayout l : KeyboardLayout.values())
-            if (Objects.equals(layoutStr, l.getDisplayName())) return l;
-        return null;
-    }
-
-    public static KeyboardLayout layout = KeyboardLayout.QWERTY;
-
 }
